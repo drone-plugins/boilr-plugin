@@ -5,5 +5,5 @@ LABEL maintainer="{{ DockerMaintainer }}" \
   org.label-schema.vendor="{{ DockerSchemaVendor }}" \
   org.label-schema.schema-version="1.0"
 
-ADD release/linux/amd64/{{ Exexcutable }} /bin/
+ADD release/linux/amd64/{{ Executable }} /bin/
 ENTRYPOINT ["/bin/{{ Executable }}"]
