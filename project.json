@@ -6,5 +6,11 @@
   "Package": "plugin",
   "Executable": "",
   "AppName": "",
-  "AppUsage": ""
+  "AppUsage": "",
+  "DockerOwner": "plugins",
+  "DockerRepo": "",
+  "DockerMaintainer": "Drone.IO Community <drone-dev@googlegroups.com>",
+  "DockerSchemaName": "",
+  "DockerSchemaVendor": "Drone.IO Community",
+  "UseWindows": true
 }
