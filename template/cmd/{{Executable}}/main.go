@@ -35,7 +35,7 @@ func main() {
 	}
 }
 
-func run(c *cli.Context) error {
+func run(ctx *cli.Context) error {
 	urfave.LoggingFromContext(ctx)
 
 	plugin := {{ Package }}.New(
