@@ -1,0 +1,10 @@
+# escape=`
+FROM plugins/base:windows-1809-amd64
+
+LABEL maintainer="{{ DockerMaintainer }}" `
+  org.label-schema.name="{{ DockerSchemaName }}" `
+  org.label-schema.vendor="{{ DockerSchemaVendor }}" `
+  org.label-schema.schema-version="{{ DockerSchemaVersion }}"
+
+ADD release/windows/amd64/{{ Executable }}.exe C:/bin/{{ Executable }}.exe
+ENTRYPOINT [ "C:\\bin\\{{ Executable }}.exe" ]
