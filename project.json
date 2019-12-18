@@ -3,5 +3,6 @@
   "Repo": "",
   "Host": "github.com",
   "Year": "2019",
-  "Package": "plugin"
+  "Package": "plugin",
+  "Executable": "",
 }
