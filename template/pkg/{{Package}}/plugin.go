@@ -12,7 +12,7 @@ import (
 
 type pluginImpl struct {
 	settings Settings
-	pipeline Pipeline
+	pipeline plugin.Pipeline
 	network  urfave.Network
 }
 
