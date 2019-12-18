@@ -1,4 +1,4 @@
-FROM plugins/base:multiarch
+FROM plugins/base:{{ if UseMultiArch }}mulitarch{{ else }}linux-arm{{ end }}
 
 LABEL maintainer="{{ DockerMaintainer }}" \
   org.label-schema.name="{{ DockerSchemaName }}" \
@@ -6,4 +6,4 @@ LABEL maintainer="{{ DockerMaintainer }}" \
   org.label-schema.schema-version="1.0"
 
 ADD release/linux/arm/{{ Executable }} /bin/
-ENTRYPOINT ["/bin/{{ Executable }}"]
+ENTRYPOINT [ "/bin/{{ Executable }}" ]
