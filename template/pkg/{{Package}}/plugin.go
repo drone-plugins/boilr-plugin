@@ -6,43 +6,21 @@
 package {{ Package }}
 
 import (
-	drone_plugin "github.com/drone-plugins/drone-plugin-lib/pkg/plugin"
+	"github.com/drone-plugins/drone-plugin-lib/pkg/plugin"
+	"github.com/drone-plugins/drone-plugin-lib/pkg/urfave"
 )
 
-type (
-	// Config for the Plugin.
-	Config struct {
-		Build    drone_plugin.Build
-		Repo     drone_plugin.Repo
-		Commit   drone_plugin.Commit
-		Stage    drone_plugin.Stage
-		Step     drone_plugin.Step
-		SemVer   drone_plugin.SemVer
-		Settings Settings
-	}
+type pluginImpl struct {
+	settings Settings
+	pipeline Pipeline
+	network  urfave.Network
+}
 
-	// Plugin interface.
-	Plugin interface {
-		// Validate the Plugin.
-		//
-		// If the validation fails then an error should be produced. The Exec
-		// method should not be called before Validate.
-		Validate() error
-
-		// Exec the Plugin.
-		//
-		// If the Plugin fails to execute then an error is produced.
-		Exec() error
-	}
-
-	pluginImpl struct {
-		config Config
-	}
-)
-
-// New Plugin from the given Config.
-func New(config Config) Plugin {
+// New Plugin from the given Settings, Pipeline, and Network.
+func New(settings Settings, pipeline plugin.Pipeline, network urfave.Network) plugin.Plugin {
 	return &pluginImpl{
-		config: config,
+		settings: settings,
+		pipeline: pipeline,
+		network:  network,
 	}
 }

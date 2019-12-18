@@ -13,7 +13,7 @@ import (
 	"github.com/drone-plugins/drone-plugin-lib/pkg/urfave"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 
 	"{{ Host }}/{{ Owner }}/{{ Repo }}/pkg/{{ Package }}"
 )
@@ -24,20 +24,10 @@ var (
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "nuget plugin"
-	app.Usage = "nuget plugin"
+	app.Name = "{{AppName}}"
+	app.Usage = "{{AppUsage}}"
 	app.Action = run
-
-	// Create the flags for the application
-	flags := settingsFlags()
-	flags = append(flags, urfave.BuildFlags()...)
-	flags = append(flags, urfave.RepoFlags()...)
-	flags = append(flags, urfave.CommitFlags()...)
-	flags = append(flags, urfave.StageFlags()...)
-	flags = append(flags, urfave.StepFlags()...)
-	flags = append(flags, urfave.SemVerFlags()...)
-
-	app.Flags = modifyFlags(flags)
+	app.Flags = append(settingsFlags(), urfave.Flags()...)
 
 	// Run the application
 	if err := app.Run(os.Args); err != nil {
@@ -46,17 +36,13 @@ func main() {
 }
 
 func run(c *cli.Context) error {
-	config := {{ Package }}.Config{
-		Build:    urfave.BuildFromContext(c),
-		Repo:     urfave.RepoFromContext(c),
-		Commit:   urfave.CommitFromContext(c),
-		Stage:    urfave.StageFromContext(c),
-		Step:     urfave.StepFromContext(c),
-		SemVer:   urfave.SemVerFromContext(c),
-		Settings: settingsFromContext(c),
-	}
+	urfave.LoggingFromContext(ctx)
 
-	plugin := {{ Package }}.New(config)
+	plugin := {{ Package }}.New(
+		settingsFromContext(ctx),
+		urfave.PipelineFromContext(ctx),
+		urfave.NetworkFromContext(ctx),
+	)
 
 	// Validate the settings
 	if err := plugin.Validate(); err != nil {
