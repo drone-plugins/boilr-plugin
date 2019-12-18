@@ -7,8 +7,10 @@ def main(ctx):
     linux('amd64'),
     linux('arm64'),
     linux('arm'),
+{{ if UseWindows }}
     windows('1903'),
     windows('1809'),
+{{ end }}
   ]
 
   after = manifest() + gitter()
@@ -189,7 +191,7 @@ def linux(arch):
       ]
     }
   }
-
+{{ if UseWindows }}
 def windows(version):
   return {
     'kind': 'pipeline',
@@ -301,7 +303,7 @@ def windows(version):
       ]
     }
   }
-
+{{ end }}
 def manifest():
   return [{
     'kind': 'pipeline',
