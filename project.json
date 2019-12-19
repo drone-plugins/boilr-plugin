@@ -12,5 +12,6 @@
   "DockerMaintainer": "Drone.IO Community <drone-dev@googlegroups.com>",
   "DockerSchemaName": "",
   "DockerSchemaVendor": "Drone.IO Community",
+  "UseMultiArch": true,
   "UseWindows": true
 }

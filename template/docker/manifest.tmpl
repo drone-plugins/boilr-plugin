@@ -1,4 +1,4 @@
-image: {{ DockerOwner }}/{{ DockerRepo }}:{{`{{#if build.tag}}`}}{{`{{trimPrefix \"v" build.tag}}`}}{{`{{else}}`}}latest{{`{{/if}}`}}
+image: {{ DockerOwner }}/{{ DockerRepo }}:{{`{{#if build.tag}}`}}{{`{{trimPrefix "v" build.tag}}`}}{{`{{else}}`}}latest{{`{{/if}}`}}
 {{`{{#if build.tags}}`}}
 tags:
 {{`{{#each build.tags}}`}}
