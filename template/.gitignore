@@ -2,3 +2,4 @@
 /{{ Executable }}
 
 coverage.out
+.drone.yml
