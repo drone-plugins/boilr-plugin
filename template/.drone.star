@@ -147,6 +147,18 @@ def linux(ctx, arch):
     },
     'steps': [
       {
+        'name': 'environment',
+        'image': 'golang:1.13',
+        'pull': 'always',
+        'environment': {
+          'CGO_ENABLED': '0',
+        },
+        'commands': [
+          'go version',
+          'go env',
+        ],
+      },
+      {
         'name': 'build',
         'image': 'golang:1.13',
         'pull': 'always',
@@ -226,6 +238,16 @@ def windows(ctx, version):
       },
     },
     'steps': [
+      {
+        'name': 'environment',
+        'environment': {
+          'CGO_ENABLED': '0',
+        },
+        'commands': [
+          'go version',
+          'go env',
+        ],
+      },
       {
         'name': 'build',
         'environment': {
