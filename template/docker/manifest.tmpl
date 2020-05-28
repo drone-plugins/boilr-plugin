@@ -23,19 +23,24 @@ manifests:
       os: linux
       variant: v7
 {{- if UseWindows }}
-  - image: {{ DockerOwner }}/{{ DockerRepo }}:{{`{{#if build.tag}}`}}{{`{{trimPrefix "v" build.tag}}`}}-{{`{{/if}}`}}windows-1809-amd64
+  - image: {{ DockerOwner }}/{{ DockerRepo }}:{{`{{#if build.tag}}`}}{{`{{trimPrefix "v" build.tag}}`}}-{{`{{/if}}`}}windows-2004-amd64
     platform:
       architecture: amd64
       os: windows
-      version: 1809
-  - image: {{ DockerOwner }}/{{ DockerRepo }}:{{`{{#if build.tag}}`}}{{`{{trimPrefix "v" build.tag}}`}}-{{`{{/if}}`}}windows-1903-amd64
-    platform:
-      architecture: amd64
-      os: windows
-      version: 1903
+      version: 2004
   - image: {{ DockerOwner }}/{{ DockerRepo }}:{{`{{#if build.tag}}`}}{{`{{trimPrefix "v" build.tag}}`}}-{{`{{/if}}`}}windows-1909-amd64
     platform:
       architecture: amd64
       os: windows
       version: 1909
+  - image: {{ DockerOwner }}/{{ DockerRepo }}:{{`{{#if build.tag}}`}}{{`{{trimPrefix "v" build.tag}}`}}-{{`{{/if}}`}}windows-1903-amd64
+    platform:
+      architecture: amd64
+      os: windows
+      version: 1903
+  - image: {{ DockerOwner }}/{{ DockerRepo }}:{{`{{#if build.tag}}`}}{{`{{trimPrefix "v" build.tag}}`}}-{{`{{/if}}`}}windows-1809-amd64
+    platform:
+      architecture: amd64
+      os: windows
+      version: 1809
 {{- end }}
