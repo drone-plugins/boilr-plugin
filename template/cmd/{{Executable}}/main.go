@@ -8,7 +8,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/drone-plugins/drone-plugin-lib/errors"
@@ -44,11 +43,19 @@ func run(ctx *cli.Context) error {
 	)
 
 	if err := plugin.Validate(); err != nil {
-		return err
+		if e, ok := err.(errors.ExitCoder); ok {
+			return e
+		}
+
+		return errors.ExitMessagef("validation failed: %w", err)
 	}
 
 	if err := plugin.Execute(); err != nil {
-		return err
+		if e, ok := err.(errors.ExitCoder); ok {
+			return e
+		}
+
+		return errors.ExitMessagef("execution failed: %w", err)
 	}
 
 	return nil
