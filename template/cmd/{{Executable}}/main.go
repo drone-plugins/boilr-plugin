@@ -12,6 +12,7 @@ import (
 
 	"github.com/drone-plugins/drone-plugin-lib/errors"
 	"github.com/drone-plugins/drone-plugin-lib/urfave"
+	"github.com/joho/godotenv"
 	"github.com/urfave/cli/v2"
 	"{{ RepoHost }}/{{ RepoOwner }}/{{ RepoName }}/plugin"
 )
@@ -20,6 +21,10 @@ var version = "unknown"
 
 func main() {
 	settings := &plugin.Settings{}
+
+	if _, err := os.Stat("/run/drone/env"); err == nil {
+		godotenv.Overload("/run/drone/env")
+	}
 
 	app := &cli.App{
 		Name:    "{{ Executable }}",
