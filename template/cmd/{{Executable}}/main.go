@@ -19,14 +19,15 @@ import (
 var version = "unknown"
 
 func main() {
-	app := cli.NewApp()
-	app.Name = "{{ Executable }}"
-	app.Usage = "{{ Usage }}"
-	app.Version = version
+	settings := &plugin.Settings{}
 
-	settings := plugin.Settings{}
-	app.Flags = append(settingsFlags(&settings), urfave.Flags()...)
-	app.Action = run(&settings)
+	app := &cli.App{
+		Name:    "{{ Executable }}",
+		Usage:   "{{ Usage }}",
+		Version: version,
+		Flags:   append(settingsFlags(settings), urfave.Flags()...),
+		Action:  run(settings)
+	}
 
 	if err := app.Run(os.Args); err != nil {
 		errors.HandleExit(err)
