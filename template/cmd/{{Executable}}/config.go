@@ -11,13 +11,8 @@ import (
 )
 
 // settingsFlags has the cli.Flags for the plugin.Settings.
-func settingsFlags() []cli.Flag {
+func settingsFlags(settings *plugin.Settings) []cli.Flag {
 	// Replace below with all the flags required for the plugin.
+	// Use Destination within the cli.Flags to populate settings
 	return []cli.Flag{}
-}
-
-// settingsFromContext creates a plugin.Settings from the cli.Context.
-func settingsFromContext(ctx *cli.Context) plugin.Settings {
-	// Replace below with the parsing of the
-	return plugin.Settings{}
 }
