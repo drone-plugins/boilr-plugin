@@ -31,7 +31,7 @@ func main() {
 		Usage:   "{{ Usage }}",
 		Version: version,
 		Flags:   append(settingsFlags(settings), urfave.Flags()...),
-		Action:  run(settings)
+		Action:  run(settings),
 	}
 
 	if err := app.Run(os.Args); err != nil {
