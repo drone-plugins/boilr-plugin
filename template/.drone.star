@@ -6,6 +6,7 @@ def main(ctx):
     linux(ctx, 'arm64'),
     linux(ctx, 'arm'),
 {{- if UseWindows }}
+    windows(ctx, '1909'),
     windows(ctx, '1903'),
     windows(ctx, '1809'),
 {{- end }}
