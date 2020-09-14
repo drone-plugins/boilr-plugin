@@ -4,6 +4,8 @@
   "RepoHost": "github.com",
   "RepoOwner": "drone-plugins",
   "RepoName": "",
+  "RepoDescription": "",
+  "RepoTopics": "drone, drone-plugin",
   "DockerOwner": "plugins",
   "DockerRepo": "",
   "DockerMaintainer": "Drone.IO Community <drone-dev@googlegroups.com>",
