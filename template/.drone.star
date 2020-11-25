@@ -51,7 +51,6 @@ def testing(ctx):
             {
                 "name": "lint",
                 "image": "golang:1.15",
-                "pull": "always",
                 "commands": [
                     "go run golang.org/x/lint/golint -set_exit_status ./...",
                 ],
@@ -65,7 +64,6 @@ def testing(ctx):
             {
                 "name": "vet",
                 "image": "golang:1.15",
-                "pull": "always",
                 "commands": [
                     "go vet ./...",
                 ],
@@ -79,7 +77,6 @@ def testing(ctx):
             {
                 "name": "test",
                 "image": "golang:1.15",
-                "pull": "always",
                 "commands": [
                     "go test -cover ./...",
                 ],
@@ -132,7 +129,6 @@ def linux(ctx, arch):
         {
             "name": "build",
             "image": "golang:1.15",
-            "pull": "always",
             "environment": {
                 "CGO_ENABLED": "0",
             },
@@ -141,7 +137,6 @@ def linux(ctx, arch):
         {
             "name": "executable",
             "image": "golang:1.15",
-            "pull": "always",
             "commands": [
                 "./release/linux/%s/{{ Executable }} --help" % (arch),
             ],
@@ -152,7 +147,6 @@ def linux(ctx, arch):
         steps.append({
             "name": "docker",
             "image": "plugins/docker",
-            "pull": "always",
             "settings": {
                 "dockerfile": "docker/Dockerfile.linux.%s" % (arch),
                 "repo": "{{ DockerOwner }}/{{ DockerRepo }}",
@@ -289,7 +283,6 @@ def manifest(ctx):
             {
                 "name": "manifest",
                 "image": "plugins/manifest",
-                "pull": "always",
                 "settings": {
                     "auto_tag": "true",
                     "username": {
@@ -305,7 +298,6 @@ def manifest(ctx):
             {
                 "name": "microbadger",
                 "image": "plugins/webhook",
-                "pull": "always",
                 "settings": {
                     "urls": {
                         "from_secret": "microbadger_url",
@@ -334,7 +326,6 @@ def gitter(ctx):
             {
                 "name": "gitter",
                 "image": "plugins/gitter",
-                "pull": "always",
                 "settings": {
                     "webhook": {
                         "from_secret": "gitter_webhook",
