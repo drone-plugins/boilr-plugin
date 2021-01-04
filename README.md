@@ -4,7 +4,7 @@
 [![Join the discussion at https://discourse.drone.io](https://img.shields.io/badge/discourse-forum-orange.svg)](https://discourse.drone.io)
 [![Drone questions at https://stackoverflow.com](https://img.shields.io/badge/drone-stackoverflow-orange.svg)](https://stackoverflow.com/questions/tagged/drone.io)
 
-This is a [boilr template](https://github.com/tmrts/boilr) for creating a plugin for Drone CI. Get started by installing the template:
+This is a [boilr template](https://github.com/Ilyes512/boilr) for creating a plugin for Drone CI. Get started by installing the template:
 
 ```console
 $ boilr template download drone-plugins/boilr-plugin drone-plugin -f
