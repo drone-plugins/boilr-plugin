@@ -46,11 +46,25 @@ def _testing(ctx):
         },
         "steps": [
             {
-                "name": "staticcheck",
+                "name": "modules",
                 "image": "golang:%s" % (_GO_VERSION),
                 "pull": "always",
                 "commands": [
-                    "go run honnef.co/go/tools/cmd/staticcheck ./...",
+                    "go get -d ./...",
+                ],
+                "volumes": [
+                    {
+                        "name": "gopath",
+                        "path": "/go",
+                    },
+                ],
+            },
+            {
+                "name": "staticcheck",
+                "image": "golang:%s" % (_GO_VERSION),
+                "commands": [
+                    "go get honnef.co/go/tools/cmd/staticcheck",
+                    "staticcheck ./...",
                 ],
                 "volumes": [
                     {
@@ -63,7 +77,8 @@ def _testing(ctx):
                 "name": "lint",
                 "image": "golang:%s" % (_GO_VERSION),
                 "commands": [
-                    "go run golang.org/x/lint/golint -set_exit_status ./...",
+                    "go get golang.org/x/lint/golint",
+                    "golint -set_exit_status ./...",
                 ],
                 "volumes": [
                     {
