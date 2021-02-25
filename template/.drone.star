@@ -1,18 +1,27 @@
+"""Starlark build for {{ RepoOwner }}/{{ RepoName }}."""
+
 def main(ctx):
-    before = testing(ctx)
+    """Entrypoint for the build.
+
+    Args:
+      ctx: The context for the build.
+    Returns:
+      The pipelines for the build.
+    """
+    before = _testing(ctx)
 
     stages = [
-        linux(ctx, "amd64"),
-        linux(ctx, "arm64"),
-        linux(ctx, "arm"),
+        _linux(ctx, "amd64"),
+        _linux(ctx, "arm64"),
+        _linux(ctx, "arm"),
 {{- if UseWindows }}
-        windows(ctx, "1909"),
-        windows(ctx, "1903"),
-        windows(ctx, "1809"),
+        _windows(ctx, "1909"),
+        _windows(ctx, "1903"),
+        _windows(ctx, "1809"),
 {{- end }}
     ]
 
-    after = manifest(ctx) + gitter(ctx)
+    after = _manifest(ctx)
 
     for b in before:
         for s in stages:
@@ -24,7 +33,7 @@ def main(ctx):
 
     return before + stages + after
 
-def testing(ctx):
+def _testing(ctx):
     return [{
         "kind": "pipeline",
         "type": "docker",
@@ -103,7 +112,7 @@ def testing(ctx):
         },
     }]
 
-def linux(ctx, arch):
+def _linux(ctx, arch):
     if ctx.build.event == "tag":
         build = [
             'go build -v -ldflags "-X main.version=%s" -a -tags netgo -o release/linux/%s/{{ Executable }} ./cmd/{{ Executable }}' % (ctx.build.ref.replace("refs/tags/v", ""), arch),
@@ -181,8 +190,7 @@ def linux(ctx, arch):
     }
 
 {{- if UseWindows }}
-
-def windows(ctx, version):
+def _windows(ctx, version):
     docker = [
         "echo $env:PASSWORD | docker login --username $env:USERNAME --password-stdin",
     ]
@@ -271,10 +279,9 @@ def windows(ctx, version):
             ],
         },
     }
-
 {{- end }}
 
-def manifest(ctx):
+def _manifest(ctx):
     return [{
         "kind": "pipeline",
         "type": "docker",
