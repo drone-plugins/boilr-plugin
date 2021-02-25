@@ -1,5 +1,7 @@
 """Starlark build for {{ RepoOwner }}/{{ RepoName }}."""
 
+_GO_VERSION = "1.15"
+
 def main(ctx):
     """Entrypoint for the build.
 
@@ -45,7 +47,7 @@ def _testing(ctx):
         "steps": [
             {
                 "name": "staticcheck",
-                "image": "golang:1.15",
+                "image": "golang:%s" % (_GO_VERSION),
                 "pull": "always",
                 "commands": [
                     "go run honnef.co/go/tools/cmd/staticcheck ./...",
@@ -59,7 +61,7 @@ def _testing(ctx):
             },
             {
                 "name": "lint",
-                "image": "golang:1.15",
+                "image": "golang:%s" % (_GO_VERSION),
                 "commands": [
                     "go run golang.org/x/lint/golint -set_exit_status ./...",
                 ],
@@ -72,7 +74,7 @@ def _testing(ctx):
             },
             {
                 "name": "vet",
-                "image": "golang:1.15",
+                "image": "golang:%s" % (_GO_VERSION),
                 "commands": [
                     "go vet ./...",
                 ],
@@ -85,7 +87,7 @@ def _testing(ctx):
             },
             {
                 "name": "test",
-                "image": "golang:1.15",
+                "image": "golang:%s" % (_GO_VERSION),
                 "commands": [
                     "go test -cover ./...",
                 ],
@@ -125,7 +127,7 @@ def _linux(ctx, arch):
     steps = [
         {
             "name": "environment",
-            "image": "golang:1.15",
+            "image": "golang:%s" % (_GO_VERSION),
             "pull": "always",
             "environment": {
                 "CGO_ENABLED": "0",
@@ -137,7 +139,7 @@ def _linux(ctx, arch):
         },
         {
             "name": "build",
-            "image": "golang:1.15",
+            "image": "golang:%s" % (_GO_VERSION),
             "environment": {
                 "CGO_ENABLED": "0",
             },
@@ -145,7 +147,7 @@ def _linux(ctx, arch):
         },
         {
             "name": "executable",
-            "image": "golang:1.15",
+            "image": "golang:%s" % (_GO_VERSION),
             "commands": [
                 "./release/linux/%s/{{ Executable }} --help" % (arch),
             ],
