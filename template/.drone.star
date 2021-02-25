@@ -313,36 +313,3 @@ def manifest(ctx):
             ],
         },
     }]
-
-def gitter(ctx):
-    return [{
-        "kind": "pipeline",
-        "type": "docker",
-        "name": "gitter",
-        "clone": {
-            "disable": True,
-        },
-        "steps": [
-            {
-                "name": "gitter",
-                "image": "plugins/gitter",
-                "settings": {
-                    "webhook": {
-                        "from_secret": "gitter_webhook",
-                    },
-                },
-            },
-        ],
-        "depends_on": [
-            "manifest",
-        ],
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/tags/**",
-            ],
-            "status": [
-                "failure",
-            ],
-        },
-    }]
