@@ -23,6 +23,11 @@ manifests:
       os: linux
       variant: v7
 {{- if UseWindows }}
+  - image: {{ DockerOwner }}/{{ DockerRepo }}:{{`{{#if build.tag}}`}}{{`{{trimPrefix "v" build.tag}}`}}-{{`{{/if}}`}}windows-20H2-amd64
+    platform:
+      architecture: amd64
+      os: windows
+      version: 20H2
   - image: {{ DockerOwner }}/{{ DockerRepo }}:{{`{{#if build.tag}}`}}{{`{{trimPrefix "v" build.tag}}`}}-{{`{{/if}}`}}windows-2004-amd64
     platform:
       architecture: amd64
