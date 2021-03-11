@@ -1,18 +1,29 @@
+"""Starlark build for {{ RepoOwner }}/{{ RepoName }}."""
+
+_GO_VERSION = "1.15"
+
 def main(ctx):
-    before = testing(ctx)
+    """Entrypoint for the build.
+
+    Args:
+      ctx: The context for the build.
+    Returns:
+      The pipelines for the build.
+    """
+    before = _testing(ctx)
 
     stages = [
-        linux(ctx, "amd64"),
-        linux(ctx, "arm64"),
-        linux(ctx, "arm"),
+        _linux(ctx, "amd64"),
+        _linux(ctx, "arm64"),
+        _linux(ctx, "arm"),
 {{- if UseWindows }}
-        windows(ctx, "1909"),
-        windows(ctx, "1903"),
-        windows(ctx, "1809"),
+        _windows(ctx, "1909"),
+        _windows(ctx, "1903"),
+        _windows(ctx, "1809"),
 {{- end }}
     ]
 
-    after = manifest(ctx) + gitter(ctx)
+    after = _manifest(ctx)
 
     for b in before:
         for s in stages:
@@ -24,7 +35,7 @@ def main(ctx):
 
     return before + stages + after
 
-def testing(ctx):
+def _testing(ctx):
     return [{
         "kind": "pipeline",
         "type": "docker",
@@ -35,11 +46,25 @@ def testing(ctx):
         },
         "steps": [
             {
-                "name": "staticcheck",
-                "image": "golang:1.15",
+                "name": "modules",
+                "image": "golang:%s" % (_GO_VERSION),
                 "pull": "always",
                 "commands": [
-                    "go run honnef.co/go/tools/cmd/staticcheck ./...",
+                    "go get -d ./...",
+                ],
+                "volumes": [
+                    {
+                        "name": "gopath",
+                        "path": "/go",
+                    },
+                ],
+            },
+            {
+                "name": "staticcheck",
+                "image": "golang:%s" % (_GO_VERSION),
+                "commands": [
+                    "go get honnef.co/go/tools/cmd/staticcheck",
+                    "staticcheck ./...",
                 ],
                 "volumes": [
                     {
@@ -50,9 +75,10 @@ def testing(ctx):
             },
             {
                 "name": "lint",
-                "image": "golang:1.15",
+                "image": "golang:%s" % (_GO_VERSION),
                 "commands": [
-                    "go run golang.org/x/lint/golint -set_exit_status ./...",
+                    "go get golang.org/x/lint/golint",
+                    "golint -set_exit_status ./...",
                 ],
                 "volumes": [
                     {
@@ -63,7 +89,7 @@ def testing(ctx):
             },
             {
                 "name": "vet",
-                "image": "golang:1.15",
+                "image": "golang:%s" % (_GO_VERSION),
                 "commands": [
                     "go vet ./...",
                 ],
@@ -76,7 +102,7 @@ def testing(ctx):
             },
             {
                 "name": "test",
-                "image": "golang:1.15",
+                "image": "golang:%s" % (_GO_VERSION),
                 "commands": [
                     "go test -cover ./...",
                 ],
@@ -103,7 +129,7 @@ def testing(ctx):
         },
     }]
 
-def linux(ctx, arch):
+def _linux(ctx, arch):
     if ctx.build.event == "tag":
         build = [
             'go build -v -ldflags "-X main.version=%s" -a -tags netgo -o release/linux/%s/{{ Executable }} ./cmd/{{ Executable }}' % (ctx.build.ref.replace("refs/tags/v", ""), arch),
@@ -116,7 +142,7 @@ def linux(ctx, arch):
     steps = [
         {
             "name": "environment",
-            "image": "golang:1.15",
+            "image": "golang:%s" % (_GO_VERSION),
             "pull": "always",
             "environment": {
                 "CGO_ENABLED": "0",
@@ -128,7 +154,7 @@ def linux(ctx, arch):
         },
         {
             "name": "build",
-            "image": "golang:1.15",
+            "image": "golang:%s" % (_GO_VERSION),
             "environment": {
                 "CGO_ENABLED": "0",
             },
@@ -136,7 +162,7 @@ def linux(ctx, arch):
         },
         {
             "name": "executable",
-            "image": "golang:1.15",
+            "image": "golang:%s" % (_GO_VERSION),
             "commands": [
                 "./release/linux/%s/{{ Executable }} --help" % (arch),
             ],
@@ -181,8 +207,7 @@ def linux(ctx, arch):
     }
 
 {{- if UseWindows }}
-
-def windows(ctx, version):
+def _windows(ctx, version):
     docker = [
         "echo $env:PASSWORD | docker login --username $env:USERNAME --password-stdin",
     ]
@@ -271,10 +296,9 @@ def windows(ctx, version):
             ],
         },
     }
-
 {{- end }}
 
-def manifest(ctx):
+def _manifest(ctx):
     return [{
         "kind": "pipeline",
         "type": "docker",
@@ -310,39 +334,6 @@ def manifest(ctx):
             "ref": [
                 "refs/heads/master",
                 "refs/tags/**",
-            ],
-        },
-    }]
-
-def gitter(ctx):
-    return [{
-        "kind": "pipeline",
-        "type": "docker",
-        "name": "gitter",
-        "clone": {
-            "disable": True,
-        },
-        "steps": [
-            {
-                "name": "gitter",
-                "image": "plugins/gitter",
-                "settings": {
-                    "webhook": {
-                        "from_secret": "gitter_webhook",
-                    },
-                },
-            },
-        ],
-        "depends_on": [
-            "manifest",
-        ],
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/tags/**",
-            ],
-            "status": [
-                "failure",
             ],
         },
     }]
